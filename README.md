@@ -31,6 +31,17 @@ npm run report:allure:serve   # genera y sirve en un servidor temporal, sin deja
 
 `allure-results/` y `allure-report/` están en `.gitignore` — son artefactos regenerables, no se versionan.
 
+### Con Docker
+
+La imagen base (`mcr.microsoft.com/playwright:v1.63.0-noble`) ya trae Chromium y todas sus dependencias de sistema instaladas — no hace falta `npx playwright install` dentro del contenedor. 
+
+```bash
+docker build -t practica-playwright-cli:local .
+docker run --rm practica-playwright-cli:local
+```
+
+El tag `v1.63.0-noble` debe coincidir con la versión instalada de `@playwright/test` en `package.json`. Si se actualiza Playwright, hay que actualizar también este tag en el `Dockerfile`, o los navegadores de la imagen quedarán desincronizados con el test runner.
+
 ## Estructura del proyecto
 
 ```
