@@ -42,6 +42,15 @@ docker run --rm practica-playwright-cli:local
 
 El tag `v1.63.0-noble` debe coincidir con la versión instalada de `@playwright/test` en `package.json`. Si se actualiza Playwright, hay que actualizar también este tag en el `Dockerfile`, o los navegadores de la imagen quedarán desincronizados con el test runner.
 
+## CI (GitHub Actions)
+
+`.github/workflows/tests.yml` construye la imagen del `Dockerfile` y corre la suite dentro en cada push/PR a `main`. Publica dos artefactos descargables desde la página de la ejecución (sección "Artifacts"):
+
+- **`playwright-report`** — el reporte HTML estándar de Playwright.
+- **`allure-report`** — generado con `--single-file`: los datos van embebidos en un único `index.html` (vía `data:` URIs), así que se puede abrir haciendo doble clic tras descomprimir el zip, sin necesitar un servidor local. Sin ese flag, Allure genera una SPA que hace `fetch()` a archivos JSON externos — y eso falla si se abre como `file://` en vez de servirse por HTTP.
+
+Ambos steps de publicación usan `if: always()`, así que el reporte se genera y sube incluso si algún test falla.
+
 ## Estructura del proyecto
 
 ```
